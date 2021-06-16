@@ -58,3 +58,4 @@ while IFS= read -r line; do
     fi
     printf "${colour}${date}  ${reason}\n"
 done <<< "${content}"
+printf "\033[0m"
