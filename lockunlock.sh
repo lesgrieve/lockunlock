@@ -33,7 +33,12 @@ SHUTDOWN_TERM='startLogout Enter'
 LOGIN_TERM='Login Window Application Started'
 MAC_VERSION=$(sw_vers -productVersion)
 
-if ! verlt ${MAC_VERSION} 10.15.5
+if ! verlt ${MAC_VERSION} 12.4
+then
+    # Mon 2022-06-20 08:23:44
+    # Today, I noticed that the old term was not generated so I found a new one. Not certain of versions this applies to but it appears to work with 12.4.
+    UNLOCK_TERM='LWScreenLock\(Private\) startUnlock:\] \| entered'
+elif ! verlt ${MAC_VERSION} 10.15.5
 then
     # Thu 2020-06-04 09:58
     # A recent Mac update 10.15.5 (19F101) no longer uses this consistently
