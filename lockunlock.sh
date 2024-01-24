@@ -53,14 +53,21 @@ SEARCH_FOR="${LOCK_TERM}|${UNLOCK_TERM}|${SHUTDOWN_TERM}|${LOGIN_TERM}"
 content=$(log show --style syslog --predicate 'process == "loginwindow"' --debug --info --last ${PERIOD} | grep -E "${SEARCH_FOR}")
 green="\033[32m"
 red="\033[31m"
+day_previous=""
 while IFS= read -r line; do
     date=${line:0:19}
+    day=${line:0:10}
     reason=${line#*|}
     if [[ $reason == *"${LOCK_TERM}"* ]] || [[ $reason == *"${SHUTDOWN_TERM}"* ]]; then
         colour=${red}
     else
         colour=${green}
     fi
+    # Empty line when the day changes
+    if [[ $day_previous != "" ]] && [[ $day_previous != $day ]]; then
+        printf "\n"
+    fi
+    day_previous=$day
     printf "${colour}${date}  ${reason}\n"
 done <<< "${content}"
 printf "\033[0m"

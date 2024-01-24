@@ -9,7 +9,7 @@ lockunlock.sh {duration}
 ```
 duration: passed directly to `log show --last`, default 1d; 1 day. Can be any number of minutes (m), hours (h), or days (d).
 
-Tested to work on macOS 11.0 Big Sur and 10.15 Catalina. May also work on 10.14 Mojave.
+Tested to work on macOS 11.0 Big Sur, up to 13.0 Ventura.
 
 ![Screenshot](screen01.png)
 
