@@ -9,9 +9,15 @@ lockunlock.sh {duration}
 ```
 duration: passed directly to `log show --last`, default 1d; 1 day. Can be any number of minutes (m), hours (h), or days (d).
 
-Tested to work on macOS 11.0 Big Sur, up to 13.0 Ventura.
+Tested to work on macOS 11.0 Big Sur, up to 15.0 Sequoia.
 
 ![Screenshot](screen01.png)
 
 Inspired by discussion at
 https://apple.stackexchange.com/questions/331589/any-way-to-get-the-last-times-the-screen-was-unlocked-in-macos/
+
+Search terms derived by running
+```
+log show --style syslog --predicate 'process == "loginwindow"' --debug --info --last 1m | less
+```
+immediately following a lock, unlock, or reboot.

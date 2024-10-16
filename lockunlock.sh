@@ -33,7 +33,14 @@ SHUTDOWN_TERM='startLogout Enter'
 LOGIN_TERM='Login Window Application Started'
 MAC_VERSION=$(sw_vers -productVersion)
 
-if ! verlt ${MAC_VERSION} 12.4
+if ! verlt ${MAC_VERSION} 15.0.1
+then
+    # Tue 2024-10-15 15:37:54
+    # Just noticing that the unlock times in Sequoia were matching the lock time.
+    # LOCK_TERM='Event: Will Sleep' # Not consistant
+    # UNLOCK_TERM='Event: Will Wake' # Not accurte time
+    UNLOCK_TERM='ended service screensaver'
+elif ! verlt ${MAC_VERSION} 12.4
 then
     # Mon 2022-06-20 08:23:44
     # Today, I noticed that the old term was not generated so I found a new one. Not certain of versions this applies to but it appears to work with 12.4.
@@ -54,10 +61,16 @@ content=$(log show --style syslog --predicate 'process == "loginwindow"' --debug
 green="\033[32m"
 red="\033[31m"
 day_previous=""
+reason_previous=""
 while IFS= read -r line; do
     date=${line:0:19}
     day=${line:0:10}
     reason=${line#*|}
+    if [[ "$reason" == "$reason_previous" ]]; then
+        # Reduce line duplication by just showing the first message matching the search term.
+        continue
+    fi
+    reason_previous="$reason"
     if [[ $reason == *"${LOCK_TERM}"* ]] || [[ $reason == *"${SHUTDOWN_TERM}"* ]]; then
         colour=${red}
     else
